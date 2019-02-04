@@ -24,11 +24,24 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BT = 1;
     private MyRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Recycler view stuff
+        recyclerView = findViewById(R.id.deviceRecyclerView);
+
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // adds divider between devices
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
 
@@ -51,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
         if (pairedDevices.size() > 0) {
-            ArrayList<DeviceItem> deviceNames = new ArrayList<>();
+            final ArrayList<DeviceItem> deviceNames = new ArrayList<>();
 
 
             for (BluetoothDevice device : pairedDevices) {
@@ -64,19 +77,17 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("test", deviceName + deviceHardwareAddress);
             }
 
-            RecyclerView recyclerView = findViewById(R.id.deviceRecyclerView);
-
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            recyclerView.setLayoutManager(layoutManager);
-
-            // adds divider between devices
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                    layoutManager.getOrientation());
-            recyclerView.addItemDecoration(dividerItemDecoration);
 
 
             adapter = new MyRecyclerViewAdapter(this, deviceNames);
+            //adapter.setClickListener(this);
+            adapter.setOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String name = deviceNames.get(position).getName();
+                    Toast.makeText(MainActivity.this, name, Toast.LENGTH_LONG).show();
+                }
+            });
             recyclerView.setAdapter(adapter);
         }
     }
