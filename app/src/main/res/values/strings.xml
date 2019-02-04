@@ -3,4 +3,6 @@
     <string name="hint_text">Select Bluetooth device to pair with to control lights</string>
     <string name="button_show_devices">Show paired devices</string>
     <string name="no_bluetooth_device">Your device does not support Bluetooth</string>
+    <string name="bluetooth_enabled">Bluetooth is now enabled</string>
+    <string name="bluetooth_not_enabled">Bluetooth enabling encountered an error and could not turn on</string>
 </resources>
